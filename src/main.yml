@@ -1,0 +1,75 @@
+---
+- hosts: macs
+  gather_facts: yes
+  tasks:
+    - name: Check user
+      command: echo $USER
+      register: current_user
+      ignore_errors: true
+
+    - name: Show user
+      debug:
+        var: current_user.stdout_lines
+
+    - name: Get current shell for the user
+      shell: echo $SHELL
+      register: current_shell
+
+    - name: Show shell
+      debug:
+        var: current_shell.stdout_lines
+
+    - name: Check Homebrew version
+      command: /opt/homebrew/bin/brew --version
+      register: brew_version
+      ignore_errors: true
+
+    - name: Show Homebrew version
+      debug:
+        var: brew_version.stdout_lines
+
+    - name: Install Homebrew Casks
+      community.general.homebrew_cask:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - 1password
+        - cheatsheet
+        - firefox@developer-edition
+        - iterm2
+        - parallels
+        - android-platform-tools
+        - gather
+        - keepassxc
+        - tiles
+        - visual-studio-code
+        - docker
+        - imazing-converter
+        - obs
+        - typora
+
+    - name: Install Homebrew Formulae
+      community.general.homebrew:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - ansible
+        - ffmpeg
+        - fish
+        - midnight-commander
+        - bpytop
+        - neofetch
+
+- name: Set default shell for a user
+  hosts: macs
+  vars_files:
+    - secret.yml
+  become: yes
+  become_method: sudo
+  gather_facts: yes
+  tasks:
+    - name: Change the default shell to fish
+      ansible.builtin.user:
+        name: janwennmann
+        shell: /opt/homebrew/bin/fish
+
