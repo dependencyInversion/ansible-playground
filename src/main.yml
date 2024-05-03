@@ -59,6 +59,7 @@
         - midnight-commander
         - bpytop
         - neofetch
+        - mas
 
 - name: Set default shell for a user
   hosts: macs
@@ -73,3 +74,37 @@
         name: janwennmann
         shell: /opt/homebrew/bin/fish
 
+- name: Setup Homebrew path in fish shell for macOS
+  hosts: macs
+  gather_facts: yes
+
+  tasks:
+    - name: Check for Homebrew in /usr/local/bin
+      stat:
+        path: /usr/local/bin/brew
+      register: brew_local
+
+    - name: Check for Homebrew in /opt/homebrew/bin
+      stat:
+        path: /opt/homebrew/bin/brew
+      register: brew_opt
+
+    - name: Ensure Homebrew path for fish shell on Intel Macs
+      lineinfile:
+        path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
+        line: "set -gx PATH /usr/local/bin $PATH"
+        create: yes
+        state: present
+        regexp: '^set -gx PATH /usr/local/bin \$PATH'
+        backup: yes
+      when: brew_local.stat.exists and (ansible_facts['architecture'] == 'x86_64')
+
+    - name: Ensure Homebrew path for fish shell on Apple Silicon
+      lineinfile:
+        path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
+        line: "set -gx PATH /opt/homebrew/bin $PATH"
+        create: yes
+        state: present
+        regexp: '^set -gx PATH /opt/homebrew/bin \$PATH'
+        backup: yes
+      when: brew_opt.stat.exists and (ansible_facts['architecture'] == 'arm64' or ansible_facts['architecture'] == 'aarch64')
