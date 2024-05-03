@@ -108,3 +108,46 @@
         regexp: '^set -gx PATH /opt/homebrew/bin \$PATH'
         backup: yes
       when: brew_opt.stat.exists and (ansible_facts['architecture'] == 'arm64' or ansible_facts['architecture'] == 'aarch64')
+
+- name: Install STARFACE beta on macOS
+  hosts: macs
+  vars_files:
+    - secret.yml
+  become: yes
+  become_method: sudo
+  vars:
+    starface_dmg_url: "https://www.starface-cdn.de/starface/clients/mac/STARFACE_8.1.0_887_889da59.dmg"
+    starface_mount_path: "/Volumes/STARFACE Installer"
+    starface_app_path: "/Applications/STARFACE.app"
+
+  tasks:
+    - name: Check if STARFACE is already installed
+      stat:
+        path: "{{ starface_app_path }}"
+      register: starface_installed
+
+    - name: Download STARFACE DMG if not installed
+      get_url:
+        url: "{{ starface_dmg_url }}"
+        dest: "/tmp/STARFACE.dmg"
+        mode: '0644'
+      when: not starface_installed.stat.exists
+
+    - name: Mount STARFACE DMG if not installed
+      command: hdiutil attach /tmp/STARFACE.dmg
+      register: mount_output
+      when: not starface_installed.stat.exists
+
+    - name: Install STARFACE if not installed
+      command: cp -R "{{ starface_mount_path }}/STARFACE.app" "{{ starface_app_path }}"
+      when: not starface_installed.stat.exists
+
+    - name: Unmount STARFACE DMG
+      command: hdiutil detach "{{ starface_mount_path }}"
+      when: not starface_installed.stat.exists
+
+    - name: Clean up DMG file
+      file:
+        path: "/tmp/STARFACE.dmg"
+        state: absent
+      when: not starface_installed.stat.exists
