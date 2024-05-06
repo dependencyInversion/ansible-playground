@@ -48,6 +48,7 @@
         - imazing-converter
         - obs
         - typora
+        - datasette
 
     - name: Install Homebrew Formulae
       community.general.homebrew:
