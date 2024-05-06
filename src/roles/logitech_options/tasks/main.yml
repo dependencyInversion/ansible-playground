@@ -1,0 +1,29 @@
+---
+- name: Check if Logitech Options is already installed
+  stat:
+    path: "{{ logitech_app_path }}"
+  register: logitech_installed
+
+- name: Download Logitech Options installer if not installed
+  get_url:
+    url: "{{ logitech_zip_url }}"
+    dest: "/tmp/options_installer.zip"
+    mode: '0644'
+  when: not logitech_installed.stat.exists
+
+- name: Unzip Logitech Options installer
+  ansible.builtin.unarchive:
+    src: "/tmp/options_installer.zip"
+    dest: "/tmp/"
+    remote_src: yes
+  when: not logitech_installed.stat.exists
+
+- name: Rename the Logitech Options app
+  command: mv "/tmp/{{ logitech_app_name_original }}" "{{ logitech_app_path }}"
+  when: not logitech_installed.stat.exists
+
+- name: Clean up installer files
+  file:
+    path: "/tmp/options_installer.zip"
+    state: absent
+  when: not logitech_installed.stat.exists

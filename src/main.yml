@@ -152,3 +152,7 @@
         path: "/tmp/STARFACE.dmg"
         state: absent
       when: not starface_installed.stat.exists
+
+- hosts: macs
+  roles:
+    - logitech_options

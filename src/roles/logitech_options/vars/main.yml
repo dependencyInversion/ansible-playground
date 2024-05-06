@@ -1,0 +1,5 @@
+---
+logitech_zip_url: "https://download01.logi.com/web/ftp/pub/techsupport/options/options_installer.zip"
+logitech_app_name_original: "LogiMgr Installer 10.20.4.app"
+logitech_app_name_custom: "Logitech Options Installer.app"
+logitech_app_path: "/Applications/{{ logitech_app_name_custom }}"
