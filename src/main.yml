@@ -156,4 +156,4 @@
 
 - hosts: macs
   roles:
-    - logitech_options
+    - logitech_options+

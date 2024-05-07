@@ -1,5 +1,5 @@
 ---
-- name: Check if Logitech Options is already installed
+- name: Check if Logitech Options+ is already installed
   stat:
     path: "{{ logitech_app_path }}"
   register: logitech_installed
@@ -19,7 +19,7 @@
   when: not logitech_installed.stat.exists
 
 - name: Rename the Logitech Options app
-  command: mv "/tmp/{{ logitech_app_name_original }}" "{{ logitech_app_path }}"
+  command: mv "/tmp/{{ logitech_app_name }}" "{{ logitech_app_path }}"
   when: not logitech_installed.stat.exists
 
 - name: Clean up installer files
