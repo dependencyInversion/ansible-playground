@@ -49,6 +49,7 @@
         - obs
         - typora
         - datasette
+        - keymapp
 
     - name: Install Homebrew Formulae
       community.general.homebrew:
@@ -62,6 +63,8 @@
         - bpytop
         - neofetch
         - mas
+        - nmap
+        - lf
 
 - name: Set default shell for a user
   hosts: macs
