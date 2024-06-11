@@ -50,6 +50,8 @@
         - typora
         - datasette
         - keymapp
+        - lm-studio
+        - anki
 
     - name: Install Homebrew Formulae
       community.general.homebrew:
