@@ -52,6 +52,8 @@
         - keymapp
         - lm-studio
         - anki
+        - microsoft-remote-desktop
+        - mracos/tap/calendr
 
     - name: Install Homebrew Formulae
       community.general.homebrew:
