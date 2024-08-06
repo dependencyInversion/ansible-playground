@@ -54,6 +54,8 @@
         - anki
         - microsoft-remote-desktop
         - mracos/tap/calendr
+        - spotify
+        - spotify-now-playing
 
     - name: Install Homebrew Formulae
       community.general.homebrew:
