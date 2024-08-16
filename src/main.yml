@@ -56,6 +56,7 @@
         - mracos/tap/calendr
         - spotify
         - cleanshot
+        - franz
 
     - name: Install Homebrew Formulae
       community.general.homebrew:
