@@ -73,6 +73,7 @@
         - nmap
         - lf
         - sqlite-utils
+        - jq
 
 - name: Set default shell for a user
   hosts: macs
